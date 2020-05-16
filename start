@@ -1,0 +1,9 @@
+#!/bin/bash
+
+NIX_TERMUX="${NIX_TERMUX:-$HOME/nix-termux}"
+
+export USER=$(whoami)
+export GC_NPROCS=1
+unset LD_PRELOAD
+
+proot -b "$NIX_TERMUX/nix:/nix" -b "$NIX_TERMUX/etc-nix:/etc/nix" -b "$NIX_TERMUX/etc-resolv.conf:/etc/resolv.conf" -b "$PREFIX/bin:/bin!" -b "$PREFIX/bin:/usr/bin!" bash --init-file "$NIX_TERMUX/in-proot"

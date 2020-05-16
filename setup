@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ -e "$HOME/.nix-profile" ]; then
+  echo "Error: ~/.nix-profile already exists"
+  exit 1
+fi
+
+[ -e nix ] || mkdir nix
+
+./start << 'EOF'
+sh <(curl https://nixos.org/nix/install)
+EOF
