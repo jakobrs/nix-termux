@@ -1,2 +1,4 @@
+#!/usr/bin/env bash
+
 [ -e "$HOME/.nix-profile" ] && . "$HOME/.nix-profile/etc/profile.d/nix.sh"
 export PS1="in-proot $PS1"

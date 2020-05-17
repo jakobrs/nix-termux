@@ -1,9 +1,23 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-NIX_TERMUX="${NIX_TERMUX:-$HOME/nix-termux}"
+NIX_TERMUX="${NIX_TERMUX:-$HOME/.nix-termux}"
 
-export USER=$(whoami)
-export GC_NPROCS=1
-unset LD_PRELOAD
+export USER=$(whoami)  # $USER is not defined in Termux for whatever reason
+export GC_NPROCS=1     # This is to make boehm-gc not complain about the missing /proc/stat
+unset  LD_PRELOAD      # libtermux-exec breaks Nix. We don't need it anyway.
 
-proot -b "$NIX_TERMUX/nix:/nix" -b "$NIX_TERMUX/etc-nix:/etc/nix" -b "$NIX_TERMUX/etc-resolv.conf:/etc/resolv.conf" -b "$PREFIX/bin:/bin!" -b "$PREFIX/bin:/usr/bin!" bash --init-file "$NIX_TERMUX/in-proot"
+launchProot() {
+  proot \
+    -b "$NIX_TERMUX/nix:/nix" \
+    -b "$NIX_TERMUX/etc-nix:/etc/nix" \
+    -b "$NIX_TERMUX/etc-resolv.conf:/etc/resolv.conf" \
+    -b "$PREFIX/bin:/bin!" \
+    -b "$PREFIX/bin:/usr/bin!" \
+    "$@"
+}
+
+if [ "$#" -eq 0 ]; then
+  launchProot bash --init-file "$NIX_TERMUX/in-proot"
+else
+  launchProot "$@"
+fi
