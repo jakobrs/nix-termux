@@ -7,6 +7,7 @@ export GC_NPROCS=1     # This is to make boehm-gc not complain about the missing
 unset  LD_PRELOAD      # libtermux-exec breaks Nix. We don't need it anyway.
 
 launchProot() {
+  export IN_NIX_TERMUX_PROOT=1
   proot \
     -b "$NIX_TERMUX/nix:/nix" \
     -b "$NIX_TERMUX/etc-nix:/etc/nix" \
