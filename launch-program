@@ -3,5 +3,5 @@
 if [ -n "$IN_NIX_TERMUX_PROOT" ]; then
   exec "~/.nix-profile/bin/$(basename "$0")" "$@"
 else
-  exec "$(dirname "$0")/start" "~/.nix-profile/bin/$(basename "$0")" "$@"
+  exec "$(dirname "$(readlink -f "$0")")/start" "~/.nix-profile/bin/$(basename "$0")" "$@"
 fi
